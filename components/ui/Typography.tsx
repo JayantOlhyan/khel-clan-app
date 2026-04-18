@@ -3,6 +3,7 @@ import { Text, TextProps } from 'react-native';
 interface TypographyProps extends TextProps {
   variant?: 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'mono';
   bold?: boolean;
+  className?: string;
 }
 
 export function Typography({ className, variant = 'body', bold, ...props }: TypographyProps) {

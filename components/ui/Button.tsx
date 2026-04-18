@@ -6,6 +6,7 @@ interface ButtonProps extends TouchableOpacityProps {
   variant?: 'primary' | 'gold' | 'outline' | 'ghost';
   title: string;
   loading?: boolean;
+  className?: string;
 }
 
 export function Button({ variant = 'primary', title, loading, className, ...props }: ButtonProps) {
