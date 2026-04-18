@@ -23,7 +23,7 @@ export default function BookingConfirmationScreen() {
         <Button 
           title="Back to Schedule" 
           variant="outline" 
-          onPress={() => router.replace('/(tabs)/my-games')} 
+          onPress={() => router.replace('/(player)/my-games')} 
           className="w-full"
         />
       </View>

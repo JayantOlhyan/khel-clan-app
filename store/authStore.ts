@@ -1,10 +1,17 @@
 import { create } from 'zustand';
-import { User } from 'firebase/auth';
+
+export type UserRole = 'player' | 'coordinator';
+
+interface KheilUser {
+  uid: string;
+  phoneNumber: string;
+  role: UserRole;
+}
 
 interface AuthState {
-  user: User | null;
+  user: KheilUser | null;
   isLoading: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: KheilUser | null) => void;
   setLoading: (isLoading: boolean) => void;
 }
 

@@ -17,11 +17,10 @@ export default function GameDetailScreen() {
 
   const handleCheckout = () => {
     setIsProcessing(true);
-    // Simulate Razorpay processing flow
     setTimeout(() => {
       setIsProcessing(false);
-      router.push(`/booking/${id}`);
-    }, 1500);
+      router.push({ pathname: `/checkout/${id}`, params: { amount: total } });
+    }, 500);
   };
 
   return (
