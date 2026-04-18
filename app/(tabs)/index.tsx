@@ -1,31 +1,57 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { View, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Typography } from '../../components/ui/Typography';
+import { GameCard, Game } from '../../components/game/GameCard';
+import { useRouter } from 'expo-router';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+// Dummy implementation representing real-time firestore data later
+const MOCK_GAMES: Game[] = [
+  {
+    id: 'g1',
+    sport: 'Football',
+    title: '5v5 Football — Dwarka Sector 12',
+    date_time: new Date(Date.now() + 86400000).toISOString(),
+    turf_name: 'Dribblers Turf',
+    slots_total: 10,
+    slots_filled: 7,
+    price_base: 230,
+    price_content_addon: 30,
+    coordinator_name: 'Rahul',
+    coordinator_rating: 4.8
+  },
+  {
+    id: 'g2',
+    sport: 'Football',
+    title: '7v7 Football — Rohini',
+    date_time: new Date(Date.now() + 172800000).toISOString(),
+    turf_name: 'Kickoff Arena',
+    slots_total: 14,
+    slots_filled: 14,
+    price_base: 250,
+    price_content_addon: 30,
+    coordinator_name: 'Amit',
+    coordinator_rating: 4.9
+  }
+];
 
-export default function TabOneScreen() {
+export default function HomeScreen() {
+  const router = useRouter();
+
+  const handleJoin = (id: string) => {
+    router.push(`/game/${id}`);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <SafeAreaView className="flex-1 bg-muted">
+      <ScrollView className="px-4 pt-4">
+        <Typography variant="h2" className="mb-1 text-primary">Upcoming Games</Typography>
+        <Typography variant="body" className="mb-4">Near you in Delhi NCR</Typography>
+        
+        {MOCK_GAMES.map(game => (
+          <GameCard key={game.id} game={game} onJoinPress={handleJoin} />
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
