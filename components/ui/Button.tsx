@@ -11,9 +11,9 @@ interface ButtonProps extends TouchableOpacityProps {
 
 export function Button({ variant = 'primary', title, loading, className, ...props }: ButtonProps) {
   const bgColors = {
-    primary: 'bg-primary',
-    gold: 'bg-gold',
-    outline: 'border border-primary bg-transparent',
+    primary: 'bg-primary shadow-lg shadow-primary/20',
+    gold: 'bg-gold shadow-lg shadow-gold/20',
+    outline: 'border-2 border-primary bg-transparent',
     ghost: 'bg-transparent',
   };
 
@@ -26,14 +26,15 @@ export function Button({ variant = 'primary', title, loading, className, ...prop
 
   return (
     <TouchableOpacity
-      className={`rounded-xl py-3 px-6 flex-row items-center justify-center ${bgColors[variant]} ${className || ''}`}
+      activeOpacity={0.8}
+      className={`rounded-xl py-4 px-6 flex-row items-center justify-center ${bgColors[variant]} ${className || ''}`}
       disabled={loading || props.disabled}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' || variant === 'ghost' ? '#1D6A36' : '#FFFFFF'} />
+        <ActivityIndicator color={variant === 'outline' || variant === 'ghost' ? '#1DAA4B' : '#FFFFFF'} />
       ) : (
-        <Typography variant="body" bold className={textColors[variant]}>
+        <Typography variant="body" bold className={`${textColors[variant]} uppercase tracking-widest text-sm`}>
           {title}
         </Typography>
       )}

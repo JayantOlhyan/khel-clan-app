@@ -5,10 +5,10 @@ import { Typography } from '../../components/ui/Typography';
 
 export default function MyGamesScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-muted">
+    <SafeAreaView className="flex-1 bg-black">
       <ScrollView className="p-4">
-        <Typography variant="h2" className="text-primary mb-2">My Games</Typography>
-        <Typography variant="body">Upcoming scheduled games and history.</Typography>
+        <Typography variant="h2" className="text-primary mb-2 tracking-tighter uppercase">Attendance</Typography>
+        <Typography variant="body" className="text-gray-500">No scheduled games found.</Typography>
       </ScrollView>
     </SafeAreaView>
   );

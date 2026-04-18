@@ -43,10 +43,10 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-muted">
+    <SafeAreaView className="flex-1 bg-black">
       <ScrollView className="px-4 pt-4">
-        <Typography variant="h2" className="mb-1 text-primary">Upcoming Games</Typography>
-        <Typography variant="body" className="mb-4">Near you in Delhi NCR</Typography>
+        <Typography variant="h2" className="mb-1 text-primary tracking-tighter">LIVE GAMES</Typography>
+        <Typography variant="body" className="mb-6 text-gray-500 uppercase text-xs tracking-widest">Delhi NCR • Near You</Typography>
         
         {MOCK_GAMES.map(game => (
           <GameCard key={game.id} game={game} onJoinPress={handleJoin} />

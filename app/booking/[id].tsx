@@ -10,21 +10,27 @@ export default function BookingConfirmationScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-white justify-center">
-      <View className="items-center p-6 mb-10">
-        <View className="bg-muted w-24 h-24 rounded-full items-center justify-center mb-6">
-          <Typography variant="h1" className="text-success text-5xl flex items-center pt-2">✓</Typography>
+    <SafeAreaView className="flex-1 bg-black justify-center">
+      <View className="items-center p-8 mb-10">
+        <View className="bg-primary/20 w-32 h-32 rounded-full items-center justify-center mb-8 border border-primary/30 shadow-2xl shadow-primary/50">
+          <Typography variant="h1" className="text-primary text-6xl">✓</Typography>
         </View>
-        <Typography variant="h2" className="mb-2 text-center">Slot Confirmed!</Typography>
-        <Typography variant="body" className="text-center mb-8">
-          You are successfully booked for Game {id}. 
-          We'll send you a reminder 2 hours before the game.
+        <Typography variant="h2" className="mb-4 text-center tracking-tighter uppercase text-3xl">Slot Secured</Typography>
+        <Typography variant="body" className="text-center mb-12 text-gray-400 tracking-wide">
+          Your reservation for Game {id} is confirmed. {"\n"}
+          Prepare for kick-off.
         </Typography>
         <Button 
-          title="Back to Schedule" 
-          variant="outline" 
+          title="VIEW MY SCHEDULE" 
+          variant="primary" 
           onPress={() => router.replace('/(player)/my-games')} 
           className="w-full"
+        />
+        <Button 
+          title="GO HOME" 
+          variant="ghost" 
+          onPress={() => router.replace('/(player)')} 
+          className="w-full mt-4"
         />
       </View>
     </SafeAreaView>

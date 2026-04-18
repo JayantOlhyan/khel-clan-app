@@ -16,13 +16,13 @@ export default function CoordProfileScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-muted">
-      <View className="p-4 flex-1">
-        <Typography variant="h2" className="text-black mb-2">Profile Details</Typography>
-        <Typography variant="body" className="mb-6">Coordinator verification active.</Typography>
+    <SafeAreaView className="flex-1 bg-black">
+      <View className="p-6 flex-1">
+        <Typography variant="h2" className="text-white mb-2 tracking-tighter uppercase">Coordinator Profile</Typography>
+        <Typography variant="body" className="mb-6 text-gray-500 uppercase text-xs tracking-widest">Verification Status: Verified</Typography>
       </View>
-      <View className="p-4 mb-4">
-        <Button title="Logout" variant="outline" onPress={logout} />
+      <View className="p-6 mb-4">
+        <Button title="Logout Session" variant="outline" onPress={logout} />
       </View>
     </SafeAreaView>
   );

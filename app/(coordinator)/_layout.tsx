@@ -7,16 +7,20 @@ export default function CoordinatorLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#D4860A', // Distinct Gold for Coordinator
-        tabBarInactiveTintColor: '#888888',
+        tabBarInactiveTintColor: '#555',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#000',
           borderTopWidth: 1,
-          borderTopColor: '#F2F7F4',
+          borderTopColor: '#111',
+          height: 60,
+          paddingBottom: 10,
         },
         tabBarLabelStyle: {
           fontFamily: 'Inter',
-          fontSize: 12,
+          fontSize: 10,
+          textTransform: 'uppercase',
+          letterSpacing: 1,
         }
       }}>
       <Tabs.Screen

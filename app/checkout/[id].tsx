@@ -21,58 +21,65 @@ export default function CheckoutScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <Stack.Screen options={{ title: 'Razorpay Checkout', presentation: 'modal' }} />
+    <SafeAreaView className="flex-1 bg-black">
+      <Stack.Screen options={{ 
+        title: 'PAYMENT', 
+        presentation: 'modal',
+        headerStyle: { backgroundColor: '#000' },
+        headerTintColor: '#fff',
+      }} />
       <View className="flex-1 p-6">
         <View className="items-center mb-8">
-           <Typography variant="body" className="text-gray-400 uppercase tracking-widest text-xs mb-2">Merchant Name</Typography>
-           <Typography variant="h2" className="text-primary tracking-tight">Kheil Clan Sports</Typography>
+           <Typography variant="body" className="text-gray-500 uppercase tracking-widest text-[10px] mb-2">Checkout Securely via</Typography>
+           <Typography variant="h2" className="text-primary tracking-tighter uppercase">Razorpay</Typography>
         </View>
 
-        <View className="bg-muted p-6 rounded-2xl mb-8 items-center border border-gray-200">
-           <Typography variant="body" className="mb-1 text-gray-600">Total Payable Amount</Typography>
-           <Typography variant="h1" className="text-5xl text-black">₹{amount || '260'}</Typography>
-           <Typography variant="caption" className="mt-2 text-success">Includes all taxes and fees</Typography>
+        <View className="bg-white/5 p-8 rounded-3xl mb-8 items-center border border-white/10">
+           <Typography variant="body" className="mb-2 text-gray-400 uppercase text-xs tracking-widest">Amount to Pay</Typography>
+           <Typography variant="h1" className="text-5xl text-white">₹{amount || '260'}</Typography>
+           <Typography variant="caption" className="mt-4 text-primary font-bold tracking-widest uppercase text-[10px]">Secure Transaction</Typography>
         </View>
 
-        <Typography variant="h3" className="mb-4">Select Payment Method</Typography>
+        <Typography variant="h3" className="mb-6 uppercase tracking-tighter">Choose Method</Typography>
         
-        <View className="flex-col gap-3">
+        <View className="flex-col gap-4">
           <TouchableOpacity 
             onPress={() => setMethod('upi')}
-            className={`flex-row items-center p-4 border rounded-xl ${method === 'upi' ? 'border-primary bg-primary/5' : 'border-gray-200'}`}
+            activeOpacity={0.7}
+            className={`flex-row items-center p-5 border-2 rounded-2xl ${method === 'upi' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/5'}`}
           >
-             <Typography variant="h2" className="mr-4">📱</Typography>
+             <Typography variant="h2" className="mr-6">📱</Typography>
              <View>
-                <Typography variant="h3" className="text-black">UPI</Typography>
-                <Typography variant="caption">Pay via GPay, PhonePe, Paytm</Typography>
+                <Typography variant="h3" className="text-white uppercase tracking-tight">UPI / GPay</Typography>
+                <Typography variant="caption" className="text-gray-500">Fast & Zero Fees</Typography>
              </View>
           </TouchableOpacity>
 
           <TouchableOpacity 
             onPress={() => setMethod('card')}
-            className={`flex-row items-center p-4 border rounded-xl ${method === 'card' ? 'border-primary bg-primary/5' : 'border-gray-200'}`}
+            activeOpacity={0.7}
+            className={`flex-row items-center p-5 border-2 rounded-2xl ${method === 'card' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/5'}`}
           >
-             <Typography variant="h2" className="mr-4">💳</Typography>
+             <Typography variant="h2" className="mr-6">💳</Typography>
              <View>
-                <Typography variant="h3" className="text-black">Credit / Debit Card</Typography>
-                <Typography variant="caption">Visa, Mastercard, RuPay</Typography>
+                <Typography variant="h3" className="text-white uppercase tracking-tight">Card Payment</Typography>
+                <Typography variant="caption" className="text-gray-500">Visa, Mastercard, RuPay</Typography>
              </View>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View className="p-6 border-t border-gray-200 bg-white">
-         <Typography variant="caption" className="text-center mb-4 flex-row justify-center items-center">
-            🔒 Secured by Razorpay
-         </Typography>
+      <View className="p-8 border-t border-white/10 bg-black/80">
          <Button 
-           title={`Pay ₹${amount || '260'}`} 
+           title={`PAY ₹${amount || '260'}`} 
            variant="primary" 
            loading={isProcessing}
            onPress={handlePay}
            className="w-full"
          />
+         <Typography variant="caption" className="text-center mt-6 text-gray-500 tracking-widest uppercase text-[9px]">
+            🔒 256-bit Secure Encryption
+         </Typography>
       </View>
     </SafeAreaView>
   );

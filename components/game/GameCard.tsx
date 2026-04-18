@@ -40,34 +40,36 @@ export function GameCard({ game, onJoinPress }: GameCardProps) {
   const timeStr = parsedDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <View className="bg-white rounded-xl p-4 mb-4 shadow-sm border border-gray-200">
+    <View className="bg-white/5 rounded-2xl p-4 mb-4 border border-white/10 overflow-hidden relative">
+      <View className="absolute top-[-20] right-[-20] w-40 h-40 bg-primary/5 rounded-full blur-3xl" />
+      
       {/* Header */}
-      <View className="flex-row justify-between items-start mb-2">
+      <View className="flex-row justify-between items-start mb-2 relative">
         <View className="flex-1 mr-2">
-          <Typography variant="h3" className="mb-1 text-black" numberOfLines={1}>⚽ {game.title}</Typography>
+          <Typography variant="h3" bold className="text-white uppercase tracking-tight" numberOfLines={1}>{game.title}</Typography>
         </View>
-        <View className="bg-muted px-2 py-1 rounded">
-          <Typography variant="mono" bold className="text-primary">₹{game.price_base}</Typography>
+        <View className="bg-primary/20 border border-primary/30 px-3 py-1 rounded-full">
+          <Typography variant="mono" bold className="text-primary text-sm">₹{game.price_base}</Typography>
         </View>
       </View>
 
       {/* Details */}
-      <View className="flex-col gap-y-2 mb-3 mt-1">
+      <View className="flex-col gap-y-2 mb-4 mt-2 relative">
         <View className="flex-row items-center">
-          <Calendar size={16} color="#4A4A4A" />
-          <Typography variant="body" className="ml-2">{dateStr}</Typography>
+          <Calendar size={14} color="#888" />
+          <Typography variant="body" className="ml-2 text-gray-400 text-sm">{dateStr}</Typography>
         </View>
         <View className="flex-row items-center">
-          <Clock size={16} color="#4A4A4A" />
-          <Typography variant="body" className="ml-2">{timeStr}</Typography>
+          <Clock size={14} color="#888" />
+          <Typography variant="body" className="ml-2 text-gray-400 text-sm">{timeStr}</Typography>
         </View>
         <TouchableOpacity onPress={handleMapPress} className="flex-row items-center">
-          <MapPin size={16} color="#1D6A36" />
-          <Typography variant="body" className="ml-2 text-primary underline">{game.turf_name}</Typography>
+          <MapPin size={14} color="#1DAA4B" />
+          <Typography variant="body" className="ml-2 text-primary text-sm underline font-bold">{game.turf_name}</Typography>
         </TouchableOpacity>
         <View className="flex-row items-center">
-          <User size={16} color="#4A4A4A" />
-          <Typography variant="body" className="ml-2">By {game.coordinator_name} (⭐ {game.coordinator_rating})</Typography>
+          <User size={14} color="#888" />
+          <Typography variant="body" className="ml-2 text-gray-400 text-sm">Organized by {game.coordinator_name} (⭐ {game.coordinator_rating})</Typography>
         </View>
       </View>
 
@@ -76,9 +78,9 @@ export function GameCard({ game, onJoinPress }: GameCardProps) {
 
       {/* Action */}
       <Button 
-        title={isFull ? "Game Full" : "Join Game"} 
-        variant={isFull ? "outline" : "gold"}
-        className="mt-4"
+        title={isFull ? "CLOSED" : "JOIN GAME"} 
+        variant={isFull ? "outline" : "primary"}
+        className="mt-6"
         disabled={isFull}
         onPress={() => onJoinPress(game.id)}
       />

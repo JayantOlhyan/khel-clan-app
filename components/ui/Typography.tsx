@@ -8,12 +8,12 @@ interface TypographyProps extends TextProps {
 
 export function Typography({ className, variant = 'body', bold, ...props }: TypographyProps) {
   const baseStyle = {
-    h1: 'font-heading text-3xl text-black',
-    h2: 'font-heading text-2xl text-black',
-    h3: 'font-heading text-xl text-black',
-    body: 'font-body text-base text-gray-600',
+    h1: 'font-heading text-4xl text-white uppercase tracking-tighter',
+    h2: 'font-heading text-2xl text-white uppercase tracking-tight',
+    h3: 'font-heading text-xl text-white',
+    body: 'font-body text-base text-gray-400',
     caption: 'font-body text-sm text-gray-400',
-    mono: 'font-mono text-base',
+    mono: 'font-mono text-base text-gray-400',
   }[variant];
 
   return (

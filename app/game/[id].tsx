@@ -24,40 +24,49 @@ export default function GameDetailScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-muted">
+    <SafeAreaView className="flex-1 bg-black">
       <ScrollView className="flex-1">
-        <View className="bg-white p-4 pb-6 shadow-sm mb-4">
-          <Typography variant="h2" className="mb-2">Game Details Overview</Typography>
-          <Typography variant="body" className="mb-4">You are viewing details for Game ID: {id}</Typography>
+        <View className="p-6">
+          <Typography variant="h2" className="mb-2 tracking-tighter uppercase">Slot Details</Typography>
+          <Typography variant="body" className="mb-8 text-gray-500 text-xs tracking-widest uppercase">ID: {id}</Typography>
           
-          <View className="flex-row items-center justify-between bg-muted p-4 rounded-xl mb-4">
-            <View>
-              <Typography variant="h3" className="text-gold flex-row items-center">
-                ✨ Content Add-On
-              </Typography>
-              <Typography variant="caption" className="mt-1 max-w-[200px]">
-                Receive 2-4 personalized action clips post-game.
-              </Typography>
+          <View className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 mr-4">
+                <Typography variant="h3" className="text-gold flex-row items-center uppercase tracking-tight">
+                  ✨ Content Add-On
+                </Typography>
+                <Typography variant="body" className="mt-2 text-gray-400 text-sm italic">
+                  Receive 2-4 personalized cinematic action clips post-game to share on social.
+                </Typography>
+              </View>
+              <Switch
+                trackColor={{ false: '#333', true: '#1DAA4B' }}
+                thumbColor={'#FFFFFF'}
+                onValueChange={setIncludeClip}
+                value={includeClip}
+              />
             </View>
-            <Switch
-              trackColor={{ false: '#888888', true: '#1D6A36' }}
-              thumbColor={'#FFFFFF'}
-              onValueChange={setIncludeClip}
-              value={includeClip}
-            />
+          </View>
+
+          <View className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <Typography variant="h3" className="mb-4 uppercase tracking-tighter text-white/50">Rules & Info</Typography>
+            <Typography variant="body" className="text-gray-400 text-sm mb-2">• No spiked shoes on turf.</Typography>
+            <Typography variant="body" className="text-gray-400 text-sm mb-2">• Reach 15 mins before kick-off.</Typography>
+            <Typography variant="body" className="text-gray-400 text-sm">• Bibs provided by coordinator.</Typography>
           </View>
         </View>
       </ScrollView>
 
       {/* Fixed bottom checkout bar */}
-      <View className="bg-white p-4 pb-8 border-t border-gray-200">
-        <View className="flex-row justify-between items-center mb-4">
-          <Typography variant="body">Total Payment</Typography>
-          <Typography variant="h2">₹{total}</Typography>
+      <View className="bg-black/80 p-6 pb-10 border-t border-white/10">
+        <View className="flex-row justify-between items-center mb-6">
+          <Typography variant="body" className="uppercase tracking-widest text-xs text-gray-400">Total Price</Typography>
+          <Typography variant="h2" className="text-white">₹{total}</Typography>
         </View>
         <Button 
-          title="Proceed to Pay" 
-          variant="gold" 
+          title="PROCEED TO PAY" 
+          variant="primary" 
           onPress={handleCheckout} 
           loading={isProcessing} 
         />
