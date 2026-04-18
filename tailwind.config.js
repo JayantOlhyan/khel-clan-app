@@ -1,19 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        primary: "#1D6A36",
+        primary: "#1DAA4B", // vibrant neon green for dark mode
         gold: "#D4860A",
-        black: "#1A1A1A",
+        black: "#111111",
         gray: {
-          400: "#888888", // Light Gray
-          600: "#4A4A4A", // Body Gray
+          400: "#888888",
+          600: "#CCCCCC",
         },
-        white: "#FFFFFF",
-        muted: "#F2F7F4", // Muted Green BG
+        white: "#0A0A0A",
+        muted: "#111111", // deep dark background
         error: "#D85A30",
         success: "#1D9E75",
       },
@@ -23,7 +24,7 @@ module.exports = {
         mono: ["JetBrains Mono", "monospace"],
       },
       borderRadius: {
-        xl: "12px", // Card border-radius (mobile)
+        xl: "12px",
       },
     },
   },
