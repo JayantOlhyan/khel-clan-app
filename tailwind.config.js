@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#1DAA4B", // vibrant neon green for dark mode
+        primary: "#1a4d2e", // Forest Green
+        flame: "#ff4d00", // New Flame Orange
         gold: "#D4860A",
         black: "#111111",
         gray: {
