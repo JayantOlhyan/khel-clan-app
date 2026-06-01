@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, TouchableOpacity, Linking, Image } from 'react-native';
+import { View, TouchableOpacity, Linking, Image, Text } from 'react-native';
 import { MapPin, Calendar, Clock, Star } from 'lucide-react-native';
-import { Typography } from '../ui/Typography';
-import { Button } from '../ui/Button';
 import { SlotMeter } from './SlotMeter';
 
 export interface Game {
@@ -49,59 +47,59 @@ export function GameCard({ game, onJoinPress }: GameCardProps) {
       {/* Hero Image Section */}
       <View className="relative h-48 w-full bg-white/10">
         {game.image_url ? (
-          <Image source={{ uri: game.image_url }} className="w-full h-full" resizeMode="cover" />
+          <Image source={{ uri: game.image_url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
         ) : (
           <View className="w-full h-full items-center justify-center bg-primary/20">
-             <Typography variant="h1" className="text-white/20 opacity-30">{game.sport}</Typography>
+             <Text className="text-white/20 opacity-30 text-3xl font-heading uppercase">{game.sport}</Text>
           </View>
         )}
         
         {/* Overlays */}
-        <View className="absolute top-4 left-4 bg-primary px-3 py-1 rounded-full">
-          <Typography variant="caption" bold className="text-white text-[10px] tracking-widest uppercase">{game.sport}</Typography>
+        <View className="absolute top-4 left-4 bg-success px-3 py-1 rounded-full">
+          <Text className="text-[#FFFFFF] text-[10px] font-bold tracking-widest uppercase font-body">{game.sport}</Text>
         </View>
 
         <View className="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded-full backdrop-blur-md flex-row items-center">
           <Star size={10} color="#1DAA4B" fill="#1DAA4B" />
-          <Typography className="text-white text-[10px] ml-1 font-bold">{game.coordinator_rating}</Typography>
+          <Text className="text-[#FFFFFF] text-[10px] ml-1 font-bold font-body">{game.coordinator_rating}</Text>
         </View>
 
         <View className="absolute bottom-4 right-4 bg-black/60 px-3 py-1.5 rounded-2xl backdrop-blur-md border border-white/10">
-          <Typography bold className="text-primary text-xs tracking-tighter">₹{game.price_base}</Typography>
+          <Text className="text-success text-xs font-bold font-body">₹{game.price_base}</Text>
         </View>
       </View>
 
       {/* Content Section */}
       <View className="p-5">
-        <Typography variant="h3" bold className="text-white uppercase tracking-tight mb-3" numberOfLines={1}>
+        <Text className="text-[#FFFFFF] text-lg font-bold uppercase tracking-tight mb-3 font-heading" numberOfLines={1}>
           {game.title}
-        </Typography>
+        </Text>
 
         <View className="flex-row items-center mb-4">
-          <View className="flex-row items-center bg-white/5 px-2 py-1 rounded-lg mr-3">
+          <View className="flex-row items-center bg-white/5 px-2.5 py-1 rounded-lg mr-3">
              <Calendar size={12} color="#888" />
-             <Typography className="text-[10px] text-gray-400 ml-1.5 uppercase tracking-widest">{dateStr}</Typography>
+             <Text className="text-[10px] text-gray-400 ml-1.5 uppercase tracking-widest font-body">{dateStr}</Text>
           </View>
-          <View className="flex-row items-center bg-white/5 px-2 py-1 rounded-lg">
+          <View className="flex-row items-center bg-white/5 px-2.5 py-1 rounded-lg">
              <Clock size={12} color="#888" />
-             <Typography className="text-[10px] text-gray-400 ml-1.5 uppercase tracking-widest">{timeStr}</Typography>
+             <Text className="text-[10px] text-gray-400 ml-1.5 uppercase tracking-widest font-body">{timeStr}</Text>
           </View>
         </View>
 
         <TouchableOpacity onPress={handleMapPress} className="flex-row items-center mb-4">
           <MapPin size={14} color="#1DAA4B" />
-          <Typography className="ml-2 text-white/50 text-xs tracking-tight" numberOfLines={1}>
+          <Text className="ml-2 text-white/50 text-xs tracking-tight font-body" numberOfLines={1}>
              {game.turf_name} • Delhi, NCR
-          </Typography>
+          </Text>
         </TouchableOpacity>
 
         <SlotMeter slotsTotal={game.slots_total} slotsFilled={game.slots_filled} />
 
         {!isFull && (
           <View className="mt-4 flex-row justify-between items-center">
-             <Typography variant="caption" className="text-[10px] uppercase tracking-widest text-gray-500">Host: {game.coordinator_name}</Typography>
-             <View className="bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20">
-                <Typography variant="caption" bold className="text-primary text-[10px] tracking-widest">TAP TO JOIN</Typography>
+             <Text className="text-[10px] uppercase tracking-widest text-gray-500 font-body">Host: {game.coordinator_name}</Text>
+             <View className="bg-success/15 px-4 py-1.5 rounded-full border border-success/20">
+                <Text className="text-success text-[10px] font-bold tracking-widest font-body">TAP TO JOIN</Text>
              </View>
           </View>
         )}

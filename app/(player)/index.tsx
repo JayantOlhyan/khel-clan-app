@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, TouchableOpacity, ImageBackground, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Typography } from '../../components/ui/Typography';
 import { GameCard, Game } from '../../components/game/GameCard';
 import { HomeHeader } from '../../components/home/HomeHeader';
 import { CategoryScroll } from '../../components/home/CategoryScroll';
 import { SearchWidget } from '../../components/home/SearchWidget';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Dummy implementation representing real-time firestore data later
 const MOCK_GAMES: Game[] = [
@@ -53,14 +53,45 @@ export default function HomeScreen() {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <CategoryScroll />
         <SearchWidget />
+
+        {/* Premium Pickleball Promo Card */}
+        <TouchableOpacity 
+          activeOpacity={0.9}
+          onPress={() => router.push('/(player)/explore')}
+          className="mx-5 mt-6 overflow-hidden rounded-3xl border border-[#CAFC05]/20 shadow-xl shadow-[#CAFC05]/5"
+        >
+          <ImageBackground 
+            source={require('../../assets/images/pickleball_welcome.png')} 
+            className="w-full h-44 justify-end p-5"
+            resizeMode="cover"
+          >
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.9)']}
+              className="absolute inset-0"
+            />
+            <View className="relative z-10">
+              <View className="bg-[#CAFC05] px-3 py-0.5 rounded-full align-self-start self-start mb-1.5">
+                <Text className="text-black font-bold text-[9px] tracking-widest uppercase font-body">SPECIAL RELEASE</Text>
+              </View>
+              <Text className="text-[#CAFC05] italic tracking-tighter uppercase text-xl font-heading font-black leading-none">
+                LET'S PLAY PICKLEBALL
+              </Text>
+              <Text className="text-gray-300 text-xs mt-1 font-body">
+                Explore popular courts, join camps & book slots instantly.
+              </Text>
+            </View>
+          </ImageBackground>
+        </TouchableOpacity>
         
         <View className="px-5 mt-8">
           <View className="flex-row justify-between items-end mb-6">
             <View>
-              <Typography variant="h2" bold className="text-white tracking-tighter uppercase">Upcoming Action</Typography>
-              <Typography className="text-gray-500 text-xs tracking-widest uppercase mt-1">Delhi NCR • LIVE NOW</Typography>
+              <Text className="text-[#FFFFFF] text-xl font-bold tracking-tighter uppercase font-heading">Upcoming Action</Text>
+              <Text className="text-gray-500 text-xs tracking-widest uppercase mt-1 font-body">Delhi NCR • LIVE NOW</Text>
             </View>
-            <Typography className="text-primary font-bold text-xs uppercase tracking-widest">See All</Typography>
+            <TouchableOpacity onPress={() => router.push('/(player)/explore')}>
+              <Text className="text-success font-bold text-xs uppercase tracking-widest font-body">See All</Text>
+            </TouchableOpacity>
           </View>
           
           {MOCK_GAMES.map(game => (
@@ -69,17 +100,17 @@ export default function HomeScreen() {
 
           <View className="flex-row justify-between items-end mb-6 mt-10">
             <View>
-              <Typography variant="h2" bold className="text-white tracking-tighter uppercase">Recommended for You</Typography>
-              <Typography className="text-gray-500 text-xs tracking-widest uppercase mt-1">Based on your activity</Typography>
+              <Text className="text-[#FFFFFF] text-xl font-bold tracking-tighter uppercase font-heading">Recommended for You</Text>
+              <Text className="text-gray-500 text-xs tracking-widest uppercase mt-1 font-body">Based on your activity</Text>
             </View>
           </View>
 
           {/* Placeholder for horizontal scroll recommended games */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-10">
              {MOCK_GAMES.map(game => (
-               <View key={`rec-${game.id}`} className="mr-4 w-72">
-                 <GameCard game={game} onJoinPress={handleJoin} />
-               </View>
+                <View key={`rec-${game.id}`} className="mr-4 w-72">
+                  <GameCard game={game} onJoinPress={handleJoin} />
+                </View>
              ))}
           </ScrollView>
         </View>
