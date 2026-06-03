@@ -47,7 +47,7 @@ export function GameCard({ game, onJoinPress }: GameCardProps) {
       {/* Hero Image Section */}
       <View className="relative h-48 w-full bg-white/10">
         {game.image_url ? (
-          <Image source={{ uri: game.image_url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          <Image source={{ uri: game.image_url }} className="w-full h-full" resizeMode="cover" />
         ) : (
           <View className="w-full h-full items-center justify-center bg-primary/20">
              <Text className="text-white/20 opacity-30 text-3xl font-heading uppercase">{game.sport}</Text>
