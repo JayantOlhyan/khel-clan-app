@@ -17,20 +17,93 @@ export default function MyGamesScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
-  const UPCOMING_ATTENDANCE = [
-    {
-      id: 'up1',
-      sport: 'Football',
-      title: '5v5 Weekend Kickoff',
-      turf: 'Dribblers Turf',
-      location: 'Dwarka Sector 12, Delhi',
-      date: 'Tomorrow, 31 May',
-      time: '08:30 AM',
-      host: 'Rahul (4.8 ★)',
-      slots: '7/10 Booked',
-      status: 'CONFIRMED'
-    }
-  ];
+  // Generate mock games dynamically so the countdowns and refund tiers can all be tested easily
+  const UPCOMING_ATTENDANCE = React.useMemo(() => {
+    const now = new Date();
+    
+    // Game 1: 100% Refund (Kickoff in 16 hours)
+    const g1Time = new Date(now.getTime() + 16 * 60 * 60 * 1000);
+    
+    // Game 2: 80% Refund (Kickoff in 8 hours)
+    const g2Time = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+    
+    // Game 3: 50% Refund (Kickoff in 2 hours)
+    const g3Time = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+    
+    // Game 4: No Refund (Kickoff in 15 minutes)
+    const g4Time = new Date(now.getTime() + 15 * 60 * 1000);
+
+    const formatGameDate = (date: Date) => {
+      const today = new Date();
+      const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      if (date.toDateString() === today.toDateString()) {
+        return `Today, ${date.getDate()} ${date.toLocaleString('en-US', { month: 'short' })}`;
+      } else if (date.toDateString() === tomorrow.toDateString()) {
+        return `Tomorrow, ${date.getDate()} ${date.toLocaleString('en-US', { month: 'short' })}`;
+      } else {
+        return `${date.getDate()} ${date.toLocaleString('en-US', { month: 'short' })}`;
+      }
+    };
+
+    const formatGameTime = (date: Date) => {
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    };
+
+    return [
+      {
+        id: 'up1',
+        sport: 'Football',
+        title: '5v5 Weekend Kickoff (100% Refund)',
+        turf: 'Dribblers Turf',
+        location: 'Dwarka Sector 12, Delhi',
+        date: formatGameDate(g1Time),
+        time: formatGameTime(g1Time),
+        host: 'Rahul (4.8 ★)',
+        slots: '7/10 Booked',
+        status: 'CONFIRMED',
+        kickoffTime: g1Time.toISOString()
+      },
+      {
+        id: 'up2',
+        sport: 'Football',
+        title: 'Midweek Friendly (80% Refund)',
+        turf: 'Dribblers Turf',
+        location: 'Dwarka Sector 12, Delhi',
+        date: formatGameDate(g2Time),
+        time: formatGameTime(g2Time),
+        host: 'Vikram (4.7 ★)',
+        slots: '8/10 Booked',
+        status: 'CONFIRMED',
+        kickoffTime: g2Time.toISOString()
+      },
+      {
+        id: 'up3',
+        sport: 'Football',
+        title: 'Late Night Pro Clash (50% Refund)',
+        turf: 'Dribblers Turf',
+        location: 'Dwarka Sector 12, Delhi',
+        date: formatGameDate(g3Time),
+        time: formatGameTime(g3Time),
+        host: 'Karan (4.9 ★)',
+        slots: '9/10 Booked',
+        status: 'CONFIRMED',
+        kickoffTime: g3Time.toISOString()
+      },
+      {
+        id: 'up4',
+        sport: 'Football',
+        title: 'Urgent Slot Filler (No Refund)',
+        turf: 'Dribblers Turf',
+        location: 'Dwarka Sector 12, Delhi',
+        date: formatGameDate(g4Time),
+        time: formatGameTime(g4Time),
+        host: 'Rahul (4.8 ★)',
+        slots: '5/10 Booked',
+        status: 'CONFIRMED',
+        kickoffTime: g4Time.toISOString()
+      }
+    ];
+  }, []);
 
   const PAST_PLAY_HISTORY = [
     {
@@ -145,6 +218,19 @@ export default function MyGamesScreen() {
                   </View>
                   <TouchableOpacity 
                     activeOpacity={0.8}
+                    onPress={() => router.push({
+                      pathname: "/ticket/[id]",
+                      params: { 
+                        id: game.id,
+                        title: game.title, 
+                        host: game.host, 
+                        turf: game.turf, 
+                        location: game.location, 
+                        date: game.date, 
+                        time: game.time,
+                        kickoffTime: game.kickoffTime
+                      }
+                    })}
                     className="bg-success px-4 py-2 rounded-xl flex-row items-center shadow-lg shadow-success/20"
                   >
                     <Text className="text-[#FFFFFF] text-[10px] font-bold uppercase tracking-widest font-body">VIEW TICKET</Text>
