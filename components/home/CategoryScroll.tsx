@@ -27,9 +27,10 @@ export function CategoryScroll() {
             key={cat.id}
             activeOpacity={0.7}
             onPress={() => {
-              if (cat.name === 'PICKLEBALL') {
-                router.push('/(player)/explore');
-              }
+              router.push({
+                pathname: '/(player)/explore',
+                params: { search: cat.name, category: cat.name }
+              });
             }}
             className={`mr-4 items-center px-6 py-4 rounded-3xl border ${
               cat.name === 'PICKLEBALL'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   ScrollView, 
@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text
 } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { 
   Search, 
@@ -118,11 +119,26 @@ const COURTS: Court[] = [
 ];
 
 export default function PickleballExploreTab() {
+  const router = useRouter();
+  const params = useLocalSearchParams();
   // NATIVE APP SCREEN SUB-NAVIGATION STATE: 'explore' | 'find_court'
   const [currentScreen, setCurrentScreen] = useState<'explore' | 'find_court'>('explore');
 
   // Search & dynamic filtering states for the Find a Court screen
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (params.search && params.search !== '') {
+      setSearchQuery(params.search as string);
+      setCurrentScreen('find_court');
+      // Clear the query parameter so the user can navigate back
+      router.setParams({ search: '' });
+    } else if (params.category && params.category === 'Courts') {
+      setCurrentScreen('find_court');
+      // Clear the query parameter
+      router.setParams({ category: '' });
+    }
+  }, [params]);
   const [filterAvailable, setFilterAvailable] = useState(true); // Default active filter
   const [filterIndoor, setFilterIndoor] = useState(false);
   const [filterOutdoor, setFilterOutdoor] = useState(false);
