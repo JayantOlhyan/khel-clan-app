@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import '../global.css';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { Platform, View } from 'react-native';
 
 export {
   ErrorBoundary,
@@ -45,13 +46,43 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const content = (
+    <Stack>
+      <Stack.Screen name="(player)" options={{ headerShown: false }} />
+      <Stack.Screen name="(coordinator)" options={{ headerShown: false }} />
+      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+    </Stack>
+  );
+
+  if (Platform.OS === 'web') {
+    return (
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <View style={{ flex: 1, backgroundColor: '#111111', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{
+            width: '100%',
+            maxWidth: 480,
+            height: '100%',
+            maxHeight: 960,
+            backgroundColor: '#000000',
+            borderWidth: 1,
+            borderColor: '#222222',
+            borderRadius: 16,
+            overflow: 'hidden',
+            shadowColor: '#000000',
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.4,
+            shadowRadius: 20,
+          }}>
+            {content}
+          </View>
+        </View>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(player)" options={{ headerShown: false }} />
-        <Stack.Screen name="(coordinator)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
+      {content}
     </ThemeProvider>
   );
 }
