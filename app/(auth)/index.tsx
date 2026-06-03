@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   TextInput, 
@@ -6,13 +6,12 @@ import {
   TouchableOpacity, 
   Dimensions, 
   StyleSheet, 
-  Platform,
-  ActivityIndicator
+  Platform 
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore, UserRole } from '../../store/authStore';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Flame, ArrowRight, ShieldCheck, Sparkles, Phone, Lock, ChevronLeft, User, Compass } from 'lucide-react-native';
+import { Flame, ArrowRight, ShieldCheck, Phone, Lock, ChevronLeft, User, Compass } from 'lucide-react-native';
 import { Text } from 'react-native';
 
 const { height } = Dimensions.get('window');
@@ -31,51 +30,14 @@ const CORE_THEME = {
 };
 
 export default function AuthScreen() {
-  const [phone, setPhone] = useState('+91');
+  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'landing' | 'phone' | 'otp' | 'role'>('landing');
   const router = useRouter();
-  
-  const user = useAuthStore(state => state.user);
   const setUser = useAuthStore(state => state.setUser);
 
-  // Platform-independent local hydration state sync
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    // Initial sync
-    const hasAlreadyHydrated = useAuthStore.persist.hasHydrated();
-    setIsHydrated(hasAlreadyHydrated);
-
-    // Event listeners for future updates (e.g. storage clear, re-login)
-    const unsubHydrate = useAuthStore.persist.onHydrate(() => setIsHydrated(false));
-    const unsubFinishHydration = useAuthStore.persist.onFinishHydration(() => setIsHydrated(true));
-
-    // Failsafe fallback: if rehydration takes more than 800ms, force bypass the loading screen
-    const fallbackTimer = setTimeout(() => {
-      setIsHydrated(true);
-    }, 800);
-
-    return () => {
-      unsubHydrate();
-      unsubFinishHydration();
-      clearTimeout(fallbackTimer);
-    };
-  }, []);
-
-  // Persistence Auto-Redirect effect when session hydrater completes
-  useEffect(() => {
-    if (isHydrated && user) {
-      if (user.role === 'player') {
-        router.replace('/(player)');
-      } else {
-        router.replace('/(coordinator)');
-      }
-    }
-  }, [isHydrated, user]);
-
   const handleSendOtp = () => {
-    if (phone.trim().length > 4) {
+    if (phone.trim().length === 10) {
       setStep('otp');
     }
   };
@@ -87,49 +49,13 @@ export default function AuthScreen() {
   };
 
   const selectRole = (role: UserRole) => {
-    setUser({ uid: 'mock-user', phoneNumber: phone, role });
+    setUser({ uid: 'mock-user', phoneNumber: `+91${phone}`, role });
     if (role === 'player') {
       router.replace('/(player)');
     } else {
       router.replace('/(coordinator)');
     }
   };
-
-  // Cinematic Dark Loading Screen during rehydration
-  if (!isHydrated) {
-    return (
-      <View style={styles.loadingContainer}>
-        {/* Cinematic Turf Background */}
-        <Image 
-          source={require('../../assets/images/nanobanana_turf.png')} 
-          style={styles.backgroundImage}
-          resizeMode="cover"
-        />
-        
-        {/* Premium dark gradient covering the background */}
-        <LinearGradient
-          colors={['rgba(0,0,0,0.4)', '#0B0F0C']}
-          style={styles.absoluteFill}
-        />
-
-        <View style={styles.loadingWrapper}>
-          <View style={[styles.logoBadgeOuter, { marginBottom: 24 }]}>
-            <LinearGradient
-              colors={['rgba(252, 92, 5, 0.1)', 'rgba(202,252,5,0.05)']}
-              style={styles.absoluteFill}
-            />
-            <Flame color={CORE_THEME.neonLime} size={38} strokeWidth={2.2} fill={CORE_THEME.neonLime} />
-          </View>
-          
-          <ActivityIndicator color={CORE_THEME.neonLime} size="large" />
-          
-          <Text style={styles.loadingText}>
-            RESTORING SESSION...
-          </Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -145,7 +71,7 @@ export default function AuthScreen() {
         colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.6)', 'rgba(11,15,12,0.92)', '#0B0F0C']}
         style={styles.absoluteFill}
       />
-
+      
       <View style={[styles.contentWrapper, step !== 'landing' ? styles.bgOverlay : null]}>
         
         {/* STEP 1: LANDING/WELCOME */}
@@ -214,23 +140,31 @@ export default function AuthScreen() {
 
             {/* Input Row */}
             <View style={styles.inputWrapper}>
-              <Phone color={CORE_THEME.slateGray} size={18} style={{ marginRight: 12 }} />
+              <Phone color={CORE_THEME.slateGray} size={18} style={{ marginRight: 8 }} />
+              <Text style={{ color: CORE_THEME.white, fontSize: 16, fontWeight: '700', fontFamily: CORE_THEME.fontFamily, marginRight: 8 }}>+91</Text>
+              <View style={{ width: 1, height: 20, backgroundColor: 'rgba(255, 255, 255, 0.15)', marginRight: 12 }} />
               <TextInput 
                 style={styles.textInput}
                 value={phone}
-                onChangeText={setPhone}
-                keyboardType="phone-pad"
+                onChangeText={(text) => {
+                  // Only allow digits 0-9 and limit to 10 characters
+                  const cleanText = text.replace(/[^0-9]/g, '');
+                  setPhone(cleanText);
+                }}
+                keyboardType="number-pad"
                 placeholderTextColor={CORE_THEME.slateGray}
-                placeholder="+91 XXXXX XXXXX"
+                placeholder="00000 00000"
+                maxLength={10}
                 autoFocus
               />
             </View>
 
             {/* Action Button */}
             <TouchableOpacity 
-              activeOpacity={0.85}
+              activeOpacity={phone.length === 10 ? 0.85 : 1}
               onPress={handleSendOtp}
-              style={styles.primaryLimeBtn}
+              style={[styles.primaryLimeBtn, phone.length !== 10 && { opacity: 0.5 }]}
+              disabled={phone.length !== 10}
             >
               <Text style={styles.primaryLimeBtnText}>Continue</Text>
               <ArrowRight color="#000000" size={16} strokeWidth={2.5} style={{ marginLeft: 8 }} />
@@ -250,7 +184,7 @@ export default function AuthScreen() {
             </TouchableOpacity>
 
             <Text style={styles.formTitle}>Verify OTP</Text>
-            <Text style={styles.formSub}>We sent a code to <Text style={{ fontWeight: '800', color: CORE_THEME.white }}>{phone}</Text></Text>
+            <Text style={styles.formSub}>We sent a code to <Text style={{ fontWeight: '800', color: CORE_THEME.white }}>+91 {phone}</Text></Text>
 
             {/* Input Row */}
             <View style={styles.inputWrapper}>
@@ -636,24 +570,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 6,
     fontFamily: CORE_THEME.fontFamily,
-  },
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: CORE_THEME.obsidian,
-  },
-  loadingWrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 20,
-  },
-  loadingText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    marginTop: 20,
-    fontFamily: CORE_THEME.fontFamily,
-    textAlign: 'center',
   },
 });
