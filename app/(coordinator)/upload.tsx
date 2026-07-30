@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Text, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { 
   UploadCloud, 
@@ -9,20 +9,64 @@ import {
   FileVideo, 
   Sparkles,
   Scissors,
-  Check
+  Check,
+  X
 } from 'lucide-react-native';
 
 export default function CoordUploadScreen() {
   const [selectedGame, setSelectedGame] = useState('5v5 Football — Dwarka (Today)');
-  const [uploadStatus, setUploadStatus] = useState<'idle' | 'success'>('idle');
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'selected' | 'uploading' | 'success'>('idle');
+  const [selectedFile, setSelectedFile] = useState<{ name: string; size: number; type: string } | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleSelectPress = () => {
-    // Mock upload success toggle
-    if (uploadStatus === 'idle') {
-      setUploadStatus('success');
+    if (Platform.OS === 'web') {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'video/*,image/*';
+      input.onchange = (e: any) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          setSelectedFile({
+            name: file.name,
+            size: file.size,
+            type: file.type
+          });
+          setUploadStatus('selected');
+        }
+      };
+      input.click();
     } else {
-      setUploadStatus('idle');
+      // Mobile fallback mock picker
+      setSelectedFile({
+        name: 'match_action_highlights_raw.mp4',
+        size: 48.5 * 1024 * 1024, // 48.5MB
+        type: 'video/mp4'
+      });
+      setUploadStatus('selected');
     }
+  };
+
+  const startUpload = () => {
+    setUploadStatus('uploading');
+    setUploadProgress(0);
+    
+    const interval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setUploadStatus('success');
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 200);
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    setUploadStatus('idle');
+    setUploadProgress(0);
   };
 
   return (
@@ -103,6 +147,68 @@ export default function CoordUploadScreen() {
               "Footage ensures player satisfaction and fuels player highlight reels!"
             </Text>
           </TouchableOpacity>
+        ) : uploadStatus === 'selected' && selectedFile ? (
+          <View className="bg-white/5 border border-white/10 rounded-3xl p-6 mb-4 relative overflow-hidden">
+            {/* Remove file button */}
+            <TouchableOpacity 
+              activeOpacity={0.8}
+              onPress={handleRemoveFile}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 border border-white/10 items-center justify-center"
+            >
+              <X size={14} color="#888" />
+            </TouchableOpacity>
+
+            <View className="flex-row items-center mb-6">
+              <View className="bg-gold/10 p-3.5 rounded-2xl border border-gold/25 mr-4">
+                <FileVideo size={28} color="#D4860A" />
+              </View>
+              <View className="flex-1 pr-8">
+                <Text className="text-[#FFFFFF] text-xs font-bold font-body uppercase" numberOfLines={1}>
+                  {selectedFile.name}
+                </Text>
+                <Text className="text-gray-500 text-[10px] mt-1 font-body">
+                  {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • {selectedFile.type || 'RAW Video'}
+                </Text>
+              </View>
+            </View>
+
+            {/* Action button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={startUpload}
+              className="w-full bg-[#D4860A] py-4 rounded-full items-center justify-center flex-row shadow-lg shadow-[#D4860A]/20"
+            >
+              <UploadCloud size={16} color="#0A0A0A" />
+              <Text className="text-[#0A0A0A] text-xs font-bold uppercase tracking-widest ml-2 font-body">
+                Upload Selected Clip
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : uploadStatus === 'uploading' && selectedFile ? (
+          <View className="bg-white/5 border border-white/10 rounded-3xl p-6 mb-4 items-center py-10">
+            <View className="bg-gold/10 p-5 rounded-full border border-gold/25 mb-6">
+              <UploadCloud size={32} color="#D4860A" />
+            </View>
+            
+            <Text className="text-[#FFFFFF] text-xs font-bold uppercase tracking-wider mb-2 font-body">
+              Uploading Footage
+            </Text>
+            <Text className="text-gray-500 text-[10px] mb-6 font-body" numberOfLines={1}>
+              {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
+            </Text>
+
+            {/* Linear Progress Bar */}
+            <View className="w-full bg-white/10 h-2 rounded-full overflow-hidden mb-3">
+              <View 
+                style={{ width: `${uploadProgress}%` }} 
+                className="bg-[#D4860A] h-full rounded-full" 
+              />
+            </View>
+            <View className="flex-row justify-between w-full mb-1">
+              <Text className="text-gray-400 text-[9px] font-mono font-bold">PROGRESS</Text>
+              <Text className="text-gold text-[9px] font-mono font-bold">{uploadProgress}%</Text>
+            </View>
+          </View>
         ) : (
           <View className="bg-success/5 border border-success/30 rounded-3xl p-6 items-center text-center py-10">
             <View className="bg-success/20 p-5 rounded-full border border-success/30 mb-4">
@@ -110,12 +216,12 @@ export default function CoordUploadScreen() {
             </View>
             <Text className="text-success tracking-wider uppercase text-sm font-bold font-heading">Upload Successful!</Text>
             <Text className="text-gray-400 text-xs text-center mt-2 px-5 leading-5 font-body">
-              Your clips for <Text className="text-gold font-bold">{selectedGame}</Text> have been uploaded and are processing for highlight generation.
+              Your clip <Text className="text-[#FFFFFF] font-bold">"{selectedFile?.name || 'footage.mp4'}"</Text> for <Text className="text-gold font-bold">{selectedGame}</Text> has been uploaded and is processing for highlight generation.
             </Text>
 
             <TouchableOpacity 
               activeOpacity={0.8}
-              onPress={() => setUploadStatus('idle')}
+              onPress={handleRemoveFile}
               className="mt-6 bg-white/5 border border-white/10 px-6 py-2.5 rounded-xl"
             >
               <Text className="text-gray-300 text-xs uppercase tracking-wider font-bold font-body">Upload More</Text>
