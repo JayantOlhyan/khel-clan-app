@@ -116,15 +116,23 @@ export default function CoordProfileScreen() {
         {/* Help & Support Items */}
         <Text className="text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2.5 font-body">Resources</Text>
         <View className="bg-white/5 border border-white/10 rounded-3xl p-2.5 mb-8">
-          <TouchableOpacity className="flex-row items-center justify-between p-3.5 border-b border-white/5">
+          <TouchableOpacity 
+            activeOpacity={0.8}
+            onPress={() => router.push('/(coordinator)/handbook')}
+            className="flex-row items-center justify-between p-3.5 border-b border-white/5"
+          >
             <View className="flex-row items-center">
               <BookOpen size={16} color="#D4860A" />
               <Text className="text-gray-200 text-xs uppercase tracking-wider ml-3.5 font-body">Host Handbook</Text>
             </View>
             <ChevronRight size={14} color="#555" />
           </TouchableOpacity>
-
-          <TouchableOpacity className="flex-row items-center justify-between p-3.5">
+ 
+          <TouchableOpacity 
+            activeOpacity={0.8}
+            onPress={() => router.push('/(coordinator)/faq')}
+            className="flex-row items-center justify-between p-3.5"
+          >
             <View className="flex-row items-center">
               <HelpCircle size={16} color="#D4860A" />
               <Text className="text-gray-200 text-xs uppercase tracking-wider ml-3.5 font-body">FAQs & Support</Text>

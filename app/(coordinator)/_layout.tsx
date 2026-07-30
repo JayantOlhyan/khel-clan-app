@@ -51,6 +51,18 @@ export default function CoordinatorLayout() {
           tabBarIcon: ({ color }) => <User color={color} size={24} />,
         }}
       />
+      <Tabs.Screen
+        name="handbook"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="faq"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
