@@ -9,13 +9,14 @@ import '../global.css';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { Platform, View } from 'react-native';
+import { ConnectivityBanner } from '../components/ConnectivityBanner';
 
 export {
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: '(auth)',
+  initialRouteName: '(auth)/index',
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -46,6 +47,29 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  useEffect(() => {
+    if (Platform.OS === 'web' && 'serviceWorker' in navigator) {
+      // Register Service Worker
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('Service Worker registered with scope:', reg.scope))
+          .catch((err) => console.error('Service Worker registration failed:', err));
+      });
+
+      // Capture PWA install prompt
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        (window as any).deferredPrompt = e;
+        window.dispatchEvent(new Event('app-installable'));
+      });
+
+      window.addEventListener('appinstalled', () => {
+        (window as any).deferredPrompt = null;
+        window.dispatchEvent(new Event('app-installed'));
+      });
+    }
+  }, []);
+
   const content = (
     <Stack>
       <Stack.Screen name="(player)" options={{ headerShown: false }} />
@@ -72,7 +96,9 @@ function RootLayoutNav() {
             shadowOffset: { width: 0, height: 10 },
             shadowOpacity: 0.4,
             shadowRadius: 20,
+            position: 'relative',
           }}>
+            <ConnectivityBanner />
             {content}
           </View>
         </View>

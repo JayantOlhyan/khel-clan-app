@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { 
   User, 
@@ -14,7 +14,8 @@ import {
   LogOut,
   ChevronRight,
   Activity,
-  Heart
+  Heart,
+  Smartphone
 } from 'lucide-react-native';
 import { useAuthStore } from '../../store/authStore';
 import { useRouter } from 'expo-router';
@@ -22,6 +23,36 @@ import { useRouter } from 'expo-router';
 export default function ProfileScreen() {
   const router = useRouter();
   const setUser = useAuthStore(state => state.setUser);
+  
+  const [isInstallable, setIsInstallable] = React.useState(false);
+
+  React.useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+
+    const checkInstallability = () => {
+      setIsInstallable(!!(window as any).deferredPrompt);
+    };
+
+    checkInstallability();
+
+    window.addEventListener('app-installable', checkInstallability);
+    window.addEventListener('app-installed', checkInstallability);
+
+    return () => {
+      window.removeEventListener('app-installable', checkInstallability);
+      window.removeEventListener('app-installed', checkInstallability);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    const promptEvent = (window as any).deferredPrompt;
+    if (!promptEvent) return;
+    promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    (window as any).deferredPrompt = null;
+    setIsInstallable(false);
+  };
 
   const logout = () => {
     setUser(null);
@@ -133,6 +164,22 @@ export default function ProfileScreen() {
             <ChevronRight size={14} color="#555" />
           </TouchableOpacity>
         </View>
+
+        {/* PWA Install Trigger */}
+        {isInstallable && (
+          <>
+            <Text className="text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2.5 font-body">Application</Text>
+            <View className="bg-white/5 border border-white/10 rounded-3xl p-2.5 mb-8">
+              <TouchableOpacity onPress={handleInstall} className="flex-row items-center justify-between p-3.5">
+                <View className="flex-row items-center">
+                  <Smartphone size={16} color="#CAFC05" />
+                  <Text className="text-gray-200 text-xs uppercase tracking-wider ml-3.5 font-body">Install KhelClan App</Text>
+                </View>
+                <ChevronRight size={14} color="#555" />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
 
         {/* Logout Button */}
         <TouchableOpacity 
