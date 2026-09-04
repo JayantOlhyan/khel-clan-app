@@ -1,109 +1,176 @@
 <div align="center">
   <br />
-  <h1>⚽ Kheil Clan</h1>
+  <h1>⚽ KhelClan (Mobile App)</h1>
   <strong>Find a game. Show up. Play. Leave with your clip.</strong>
   <br />
   <br />
 
-  [![React Native](https://img.shields.io/badge/React_Native-Expo_51+-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+  [![React Native](https://img.shields.io/badge/React_Native-Expo_54-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
   [![NativeWind](https://img.shields.io/badge/NativeWind-v4__TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://nativewind.dev/)
   [![Zustand](https://img.shields.io/badge/Zustand-State_Management-764ABC?style=for-the-badge)](https://zustand-demo.pmnd.rs/)
-  [![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34)](https://firebase.google.com/)
 
 </div>
 
 <br />
 
-Kheil Clan is a managed sports community platform operating in Delhi NCR that bridges the gap between recreational players and perfectly coordinated games. Kheil Clan manages the entire game experience—handling slot bookings, match logistics, Razorpay payments, and most importantly: **delivering 720p HD post-game action clips directly to the player**.
+## ⚠️ Project Status: Frontend Prototype (Phase 1)
 
-This repository serves as Phase 1 of the **React Native Player Mobile Application**.
+**KhelClan** is currently implemented as a **frontend UI prototype** built with React Native and Expo. 
+
+While the interface is fully fleshed out with complex styling and navigation logic, **the core business logic, database, authentication, and payment gateways are currently mocked.** 
+- **Authentication** uses a mock Zustand store rather than real phone OTP verification.
+- **Payments (Razorpay)** are simulated via `setTimeout` delays.
+- **Data (Courts, Games)** is hardcoded in the frontend files.
+- **Firebase** is initialized in `lib/firebase.ts` but is not actively used for data fetching or authentication yet.
 
 ---
 
-## ⚡ Tech Stack (Phase 1)
+## 🎯 Overview
 
-* **Framework:** React Native managed by [Expo SDK 54](https://expo.dev/)
-* **Routing:** Expo Router (File-based navigation)
-* **Styling Engine:** `NativeWind v4` bringing Tailwind CSS capabilities
-* **State Management:** `Zustand` 
-* **Backend Integration:** Firebase Web SDK bindings (Auth, Firestore, Storage)
-* **Storage / Caching:** `@react-native-async-storage/async-storage`
+KhelClan is a managed sports community platform operating in Delhi NCR that bridges the gap between recreational players and perfectly coordinated games. The application targets two primary users:
+1. **Players:** Can search for fields, book slots, compete in matches, and view their post-game action clips.
+2. **Coordinators:** Can manage turfs, run match play, and upload actions.
+
+---
+
+## ⚡ Tech Stack (Verified)
+
+### Frontend
+* **Framework:** React Native managed by [Expo SDK 54.0.33](https://expo.dev/)
+* **Routing:** Expo Router (File-based navigation v6)
+* **Styling:** `NativeWind v4` (Tailwind CSS v3 engine)
+* **State Management:** `Zustand v5.0.12`
 * **Icons:** `lucide-react-native`
-* **Typography:** `@expo-google-fonts` utilizing *Plus Jakarta Sans*, *Inter*, and *JetBrains Mono*.
+* **Fonts:** `@expo-google-fonts` (Inter, JetBrains Mono, Plus Jakarta Sans)
+
+### Services (Configured but Unused/Mocked)
+* **Firebase:** App, Auth, Firestore, Storage SDKs are present (`v12.12.0`).
+* **Storage:** `@react-native-async-storage/async-storage`
 
 ---
 
-## 🎨 Official Design System
+## 📂 Repository Structure
 
-The application styling follows strict design tokens configured natively in `tailwind.config.js`:
-
-| Token | Hex String | Utility Usage | Application |
-|-------|------------|---------------|-------------|
-| **Primary** | `#1D6A36` | `bg-primary` / `text-primary` | Primary CTA, Header Accents, Active Nav |
-| **Gold** | `#D4860A` | `<Button variant="gold" />` | Check-out CTAs, Add-on Badges |
-| **Success** | `#1D9E75` | `text-success` / `bg-success` | Positive UI (Slot Meter Full, Confirmed) |
-| **Black** | `#1A1A1A` | `text-black` | Core Headings (`h1`, `h2`, `h3`) |
-| **Muted** | `#F2F7F4` | `bg-muted` | Screen Backgrounds, Zebra Cards |
-| **Gray** | `#4A4A4A` | `text-gray-600` | Standard UI Body copy |
-
----
-
-## 📂 Project Architecture
-
-```raw
-/KhelClan mobile
-├── app/
-│   ├── (auth)/             # Phone OTP flow, profile setup
-│   ├── (tabs)/             # Central Bottom Tab Navigation
-│   │   ├── _layout.tsx     # Base App navigation mapping
-│   │   ├── index.tsx       # 🏠 Home view / Live feeds
-│   │   ├── explore.tsx     # 🔍 Games search functionality
-│   │   ├── my-games.tsx    # 📅 Attendance & upcoming schedule 
-│   │   ├── clips.tsx       # ▶️ Post-game cloud action clips
-│   │   └── profile.tsx     # 👤 User metrics & settings
-│   ├── game/
-│   │   └── [id].tsx        # Match details & check-out configuration
-│   └── booking/
-│       └── [id].tsx        # Razorpay confirmation receipt routing
-├── components/
-│   ├── ui/                 # Atomic design (Typography.tsx, Button.tsx, etc.)
-│   └── game/               # Micro components (GameCard.tsx, SlotMeter.tsx)
-├── constants/              # Asset definitions and primitive styles
-├── lib/                    # SDK configs (firebase.ts, razorpay.ts)
-├── store/                  # Zustand slices (authStore.ts)
-└── tailwind.config.js      # Global layout tokens 
+```text
+/
+├── app/                  # Expo Router file-based routing
+│   ├── (auth)/           # Phone OTP flow (Mocked)
+│   ├── (player)/         # Player Role Layout & Screens (Explore, Games, Clips, Profile)
+│   ├── (coordinator)/    # Coordinator Role Layout & Screens (Games, Upload, Handbook)
+│   ├── booking/          # Booking confirmation screens
+│   ├── checkout/         # Mocked Razorpay payment flow
+│   ├── game/             # Game detail view
+│   └── _layout.tsx       # Root Navigation Layout
+├── assets/               # Local static images (fonts, icons, mock turfs)
+├── components/           # UI Components (Buttons, Modals, Typography, Game cards)
+├── constants/            # Styling constants and theme configuration
+├── lib/                  # SDK configs (firebase.ts initialized)
+├── store/                # Zustand global state (authStore.ts)
+├── package.json          # Dependency definitions
+└── tailwind.config.js    # Global Tailwind/NativeWind layout tokens 
 ```
 
 ---
 
-## 🚀 Quick Setup & Run Instructions
+## 🔐 Authentication & Authorization
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/JayantOlhyan/khel-clan-app.git
+**Status: MOCKED**
 
-# 2. Navigate to directory
-cd "khel-clan-app" 
+The application has a UI flow for Phone Authentication (OTP) in `app/(auth)/index.tsx`, but it does not execute real Firebase Auth calls. 
+Entering any 10-digit number and any OTP will advance the flow, injecting a hardcoded `uid: 'mock-user'` into the `useAuthStore` Zustand state.
 
-# 3. Install packages
-npm install
+Roles are defined in `store/authStore.ts`:
+- `player`
+- `coordinator`
 
-# 4. Prepare local Environment variables
-# Populate `.env.local` using the keys below (if you have them provisioned)
-EXPO_PUBLIC_FIREBASE_API_KEY=YOUR_KEY
-EXPO_PUBLIC_FIREBASE_PROJECT_ID=kheil-clan-dev
-
-# 5. Start Expo Server
-npm start
-```
-You can preview the interface directly downloading the **Expo Go** app on your iOS or Android device and scanning the QR code emitted in the terminal.
+The UI adapts routing to either `/(player)` or `/(coordinator)` based on the selected role during the mock login.
 
 ---
 
-## 📝 Current MVP Progress
+## 💳 Payments & Razorpay
 
-- [x] **Base Build:** Complete React Native Setup matching explicit WRD config requirements.
-- [x] **Tailwind Sync:** Fully established Nativewind engine with custom typographies mapping.
-- [x] **Component Library Toolkit:** `<Typography>`, `<Button>`, `<SlotMeter>` built from scratch and globally typed. 
-- [x] **Screen Mapping:** Completed routing matrix integrating nested file-system stacks and `lucide` icons.
-- [x] **Store Bootstrapping:** Active state slice integration handling Firebase instances.
+**Status: PLANNED / MOCKED**
+
+The UI displays Razorpay integration on the `app/checkout/[id].tsx` screen, but this is entirely simulated. 
+Clicking "Pay" triggers a 2-second `setTimeout` before redirecting to the booking confirmation screen. No actual Razorpay SDK (`react-native-razorpay`) is installed in `package.json`.
+
+---
+
+## 🛠 Prerequisites
+
+* **Node.js:** v18+ (Recommended)
+* **Package Manager:** npm
+* **Expo CLI:** Expo Go app installed on your physical device, or an iOS/Android emulator.
+
+---
+
+## 🚀 Installation & Local Development
+
+1. **Clone the repository & navigate:**
+   ```bash
+   git clone https://github.com/JayantOlhyan/khel-clan-app.git
+   cd khel-clan-app
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+   Create a `.env` file in the root directory. These are required by `lib/firebase.ts` to boot without crashing, even if Firebase isn't actively queried.
+   ```env
+   EXPO_PUBLIC_FIREBASE_API_KEY=your_api_key
+   EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   EXPO_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   EXPO_PUBLIC_FIREBASE_APP_ID=your_app_id
+   ```
+
+4. **Start the Expo Server:**
+   ```bash
+   npm start
+   # or
+   npm run ios     # For iOS Simulator
+   npm run android # For Android Emulator
+   ```
+
+---
+
+## 🧪 Testing
+
+**Status: NOT IMPLEMENTED**
+
+There is no testing framework actively configured or utilized in this repository. `react-test-renderer` exists in `devDependencies`, and a single boilerplate Expo test file exists at `components/__tests__/StyledText-test.js`, but no test scripts are defined in `package.json`.
+
+---
+
+## 🚧 Known Limitations
+
+* **No Backend Connection:** All game data, courts, clips, and profiles are hardcoded in the component files (e.g., `app/(player)/explore.tsx`). 
+* **Mocked Auth:** OTPs are not verified. Phone numbers are not validated beyond being 10 digits.
+* **No Real Payments:** Razorpay UI is a facade.
+* **No Tests:** Zero test coverage. 
+
+---
+
+## 🗺 Roadmap
+
+### Planned Integration (Phase 2)
+* [ ] Implement actual Firebase Phone Authentication (`signInWithPhoneNumber`).
+* [ ] Migrate mocked `COURTS` and `MOCK_GAMES` to Firestore collections.
+* [ ] Integrate official `react-native-razorpay` SDK for transaction processing.
+* [ ] Implement Firebase Cloud Storage uploads for coordinator game clips.
+* [ ] Add Jest & React Native Testing Library for component testing.
+
+---
+
+## 🤖 AI / Developer Orientation
+
+If you are expanding upon this repository, use the following orientation to locate and implement missing features:
+
+* **To implement real Authentication:** Modify `app/(auth)/index.tsx` replacing `setUser({uid: 'mock-user'})` with the Firebase `signInWithPhoneNumber` flow from `lib/firebase.ts`. Update `store/authStore.ts` to persist the real user object.
+* **To implement dynamic Courts/Games:** Replace the static `COURTS` arrays in `app/(player)/explore.tsx` and `app/(coordinator)/games.tsx` with Firestore `getDocs` or `onSnapshot` queries.
+* **To implement real Payments:** Overhaul the `handlePay` timeout function in `app/checkout/[id].tsx` using the `react-native-razorpay` SDK wrapper.
+* **To style new components:** Use `NativeWind` class names mapping to tokens in `tailwind.config.js`. Avoid inline `StyleSheet.create` unless absolutely necessary for complex animations or static assets.
